@@ -31,6 +31,7 @@ public class HttpServer {
                 // process request
                 Request request = new Request(inputStream);
                 request.parseUri();
+                
                 // process response
 
             } catch (IOException e) {
