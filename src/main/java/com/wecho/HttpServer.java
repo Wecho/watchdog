@@ -24,23 +24,31 @@ public class HttpServer {
 
         while (!shutdown) {
             assert serverSocket != null;
-            try (Socket socket = serverSocket.accept();
-                 InputStream inputStream = socket.getInputStream();
-                 OutputStream outputStream = socket.getOutputStream()) {
-
+            try {
+                Socket socket = serverSocket.accept();
+                InputStream inputStream = socket.getInputStream();
+                OutputStream outputStream = socket.getOutputStream();
                 // process request
                 Request request = new Request(inputStream);
                 request.parseUri();
-                
-                // process response
 
+                Response response = new Response(outputStream);
+                response.setRequest(request);
+
+                if(request.getUri().startsWith("/servlet")){
+                    // process response
+                    ServletProcessor servletProcessor = new ServletProcessor();
+                    servletProcessor.process(request,response);
+                }
+
+                socket.close();
+                //check if the previous URI is a shutdown command
+                shutdown = request.getUri().equals(SHUTDOWN_COMMAND);
             } catch (IOException e) {
                 e.printStackTrace();
+                System.exit(1);
             }
-
-
         }
-
     }
 
     public static void main(String[] args) {

@@ -23,16 +23,16 @@ public class Request implements ServletRequest {
         return uri;
     }
 
-    private String parse(String requestStr){
+    private String parse(String requestStr) {
         int index = requestStr.indexOf(" ");
-        if(index != -1){
-            int index1 = requestStr.indexOf(" ",index+1);
-            return requestStr.substring(index+1,index1);
+        if (index != -1) {
+            int index1 = requestStr.indexOf(" ", index + 1);
+            return requestStr.substring(index + 1, index1);
         }
         return null;
     }
 
-    public void parseUri(){
+    public void parseUri() {
         StringBuffer stringBuffer = new StringBuffer(2000);
         int i = -1;
         byte[] b = new byte[2048];
@@ -40,10 +40,10 @@ public class Request implements ServletRequest {
             i = inputStream.read(b);
         } catch (IOException e) {
             e.printStackTrace();
-            i =-1;
+            i = -1;
         }
 
-        for (int j =0;j<i;++j){
+        for (int j = 0; j < i; ++j) {
             stringBuffer.append((char) b[j]);
         }
         uri = parse(stringBuffer.toString());
